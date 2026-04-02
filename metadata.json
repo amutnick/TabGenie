@@ -1,0 +1,5 @@
+{
+  "name": "TabGenie",
+  "description": "Upload audio files to automatically generate guitar tabs and chords using AI.",
+  "requestFramePermissions": []
+}
