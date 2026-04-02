@@ -77,13 +77,15 @@ export default function App() {
       const base64Data = await fileToBase64(file);
       
       const model = "gemini-3-flash-preview";
-      const prompt = `Analyze this audio file and identify the guitar chords played. 
-      Generate a guitar tab representation of these chords. 
-      Format the output as a clean, printable guitar tab.
-      Include the chord names above the tabs.
+      const prompt = `Analyze the ENTIRE audio file and identify all guitar chords played throughout the song. 
+      Generate a comprehensive guitar tab representation covering the full duration of the track.
+      Break the transcription down by song sections (e.g., Intro, Verse, Chorus, Bridge, Outro).
+      Format the output as a clean, printable guitar tab in ASCII format.
+      Include the chord names above the tabs for every section.
+      Identify all unique chords and list them.
       Structure the response as a JSON object with two fields:
-      "chords": an array of strings (the chord names found),
-      "tabContent": a string containing the formatted guitar tabs in ASCII format.
+      "chords": an array of strings (all unique chord names found),
+      "tabContent": a string containing the full-length formatted guitar tabs.
       Return ONLY the JSON object.`;
 
       const response = await genAI.models.generateContent({
@@ -102,7 +104,8 @@ export default function App() {
           }
         ],
         config: {
-          responseMimeType: "application/json"
+          responseMimeType: "application/json",
+          systemInstruction: "You are a professional music transcriber. Your goal is to provide a complete, bar-by-bar guitar tab for the entire duration of the provided audio file. Do not summarize or provide only a snippet; transcribe the full song structure including all chord changes."
         }
       });
 
